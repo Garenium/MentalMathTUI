@@ -1,17 +1,18 @@
 package com.gikezian;
 
+import java.text.DecimalFormat;
 import java.util.Random;
 import java.io.FileWriter;
-//import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 // import junit;
 import com.harium.hci.espeak.*;
-// import org.slf4j.*;
+import org.apache.commons.lang3.math.NumberUtils;
 
 class MentalMath{
 
   private static final String FILE_NAME = "quiz.txt";
+  private static DecimalFormat decimalFormat = new DecimalFormat("0.0");
 
   private static double returnSolution(int n1, int n2, int op){
 
@@ -24,7 +25,7 @@ class MentalMath{
               n1 = n1 ^ n2;
               n2 = n1 ^ n2;
               n1 = n2 ^ n1;
-          }
+         }
       }
 
       switch (op) {
@@ -38,9 +39,8 @@ class MentalMath{
               solution = n1 * n2;
               break;
           case 3:
-              solution = n1 / n2;
+              solution = Double.parseDouble(decimalFormat.format(n1 / n2)); //formats to 0.0
               break;
-          //deal change the case 3 part to deal with non-terminating nums later
       }
         return solution;
   }
@@ -59,7 +59,7 @@ class MentalMath{
     int op; // op is short for operator (where 0 is +, 1 is -, 2 is *, and 3 is /)
     char charOp;
     double solution; //typed the full name "solution" to stand out
-    int score;
+    int score = 0;
     int questionNo = 1;
 
     try{
@@ -68,11 +68,13 @@ class MentalMath{
         Scanner inp = new Scanner(System.in);
         fw.write("");
 
-        while(questionNo < 4) {
-            n1 = rand.nextInt(10);  //Numbers from [0..100]
-            n2 = rand.nextInt(10)+1;  //Numbers from [1..100]
-            //op = rand.nextInt(4);    //[0..3]
-            op = 1; //Debugging purposes
+        while(questionNo < 10) {
+/*            n1 = rand.nextInt(100);  //Numbers from [0..100]
+            n2 = rand.nextInt(100)+1;  //Numbers from [1..100]
+            op = rand.nextInt(4);    //[0..3]*/
+            n1 = 38;
+            n2 = 26;
+            op = 3; //Debugging purposes
             charOp = charOps[op]; //For writing to the file and the console
             solution = returnSolution(n1,n2,op);
 
@@ -86,13 +88,21 @@ class MentalMath{
 
             //User input
             String answer = inp.nextLine();
+
+
+            while( !(NumberUtils.isCreatable(answer)) ){
+                espeak.speak(question);
+                answer = inp.nextLine();
+            }
+
             fw.write(" = " + answer + '\n');
 
 
             if( (solution == Double.parseDouble(answer)) ){
                 System.out.println("Correct!");
                 System.out.println("The answer was " + answer);
-                fw.write(question + " = " + answer + " [V]" +'\n');
+                fw.write(question + " = " + answer + " [V]" +"\n\n");
+                ++score;
             }
             else{
                 System.out.println("Incorrect!");
