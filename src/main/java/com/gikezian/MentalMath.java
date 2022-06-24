@@ -14,19 +14,9 @@ class MentalMath{
   private static final String FILE_NAME = "quiz.txt";
   private static DecimalFormat decimalFormat = new DecimalFormat("0.0");
 
-  private static double returnSolution(int n1, int n2, int op){
+  private static double returnSolution(double n1, double n2, int op){
 
       double solution = 0.0;
-      //swap if the dividend is smaller than the divisor
-
-      if(op == 4){
-          if (((int) (Math.log10(n1) + 1) == 1)) {
-              System.out.println("n1 was small");
-              n1 = n1 ^ n2;
-              n2 = n1 ^ n2;
-              n1 = n2 ^ n1;
-         }
-      }
 
       switch (op) {
           case 0:
@@ -60,7 +50,7 @@ class MentalMath{
     char charOp;
     double solution; //typed the full name "solution" to stand out
     int score = 0;
-    int questionNo = 1;
+    int questionNo = 0;
 
     try{
         FileWriter fw = new FileWriter(FILE_NAME);
@@ -68,18 +58,18 @@ class MentalMath{
         Scanner inp = new Scanner(System.in);
         fw.write("");
 
-        while(questionNo < 10) {
-/*            n1 = rand.nextInt(100);  //Numbers from [0..100]
-            n2 = rand.nextInt(100)+1;  //Numbers from [1..100]
-            op = rand.nextInt(4);    //[0..3]*/
-            n1 = 38;
-            n2 = 26;
-            op = 3; //Debugging purposes
+        while(questionNo < 4) {
+            n1 = rand.nextInt(10);  //Numbers from [0..100]
+            n2 = rand.nextInt(10)+1;  //Numbers from [1..100]
+            op = rand.nextInt(4);    //[0..3]
+/*            n1 = 3;
+            n2 = 6;
+            op = 3; //Debugging purposes*/
             charOp = charOps[op]; //For writing to the file and the console
             solution = returnSolution(n1,n2,op);
 
             String question = String.format("%d %c %d", n1, charOp, n2);
-            fw.write(questionNo+". " + question);
+            fw.write((questionNo+1) + ". " + question);
 
             //write to System.out (FIX THE FORMATTING) (Still not satisfied)
             String expression = String.format("  %s\n%c %s\n‾‾‾‾‾\n", String.format("%1$02d",n1), charOp, String.format("%1$02d",n2));
@@ -112,7 +102,11 @@ class MentalMath{
 
             questionNo = questionNo + 1;
         }
+
+        fw.write("Score: " + score + "/" + questionNo);
         fw.close();
+
+        System.out.println("You scored: " + score + "/" + questionNo);
     }
     catch(IOException e){
       System.out.println("File-related exception: ");
