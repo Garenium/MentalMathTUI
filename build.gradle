@@ -40,6 +40,8 @@ dependencies {
     implementation group: 'com.harium.hci', name: 'espeak', version: '1.0.3'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+    // https://mvnrepository.com/artifact/org.fusesource.jansi/jansi
+    implementation group: 'org.fusesource.jansi', name: 'jansi', version: '2.4.0'
 }
 
 task createFatJar(type: Jar) {
