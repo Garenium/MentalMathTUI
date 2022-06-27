@@ -15,7 +15,7 @@ import static org.fusesource.jansi.Ansi.ansi;
 class MentalMath{
 
   private static final String FILE_NAME = "quiz.txt";
-  private static DecimalFormat decimalFormat = new DecimalFormat("0.0");
+  private static final DecimalFormat decimalFormat = new DecimalFormat("0.0");
 
   private static double returnSolution(double n1, double n2, int op){
 
@@ -38,7 +38,7 @@ class MentalMath{
         return solution;
   }
 
-    public final static void clearConsole()
+    public static void clearConsole()
     {
         try
         {
@@ -46,7 +46,7 @@ class MentalMath{
 
             if (os.contains("Windows"))
             {
-                Runtime.getRuntime().exec("cls");
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             }
             else
             {
@@ -89,9 +89,9 @@ class MentalMath{
             n1 = rand.nextInt(10);  //Numbers from [0..100]
             n2 = rand.nextInt(10)+1;  //Numbers from [1..100]
             op = rand.nextInt(4);    //[0..3]
-        /*    n1 = 3;
+/*            n1 = 3;
             n2 = 6;
-            op = 3; //Debugging purposes*/
+            op = 1; //Debugging purposes*/
             charOp = charOps[op]; //For writing to the file and the console
             solution = returnSolution(n1,n2,op);
 
@@ -99,12 +99,21 @@ class MentalMath{
             fw.write((questionNo+1) + ". " + question);
 
             //write to System.out (FIX THE FORMATTING) (Still not satisfied)
-            String expression = String.format("  %s\n%c %s\n‾‾‾‾‾\n", String.format("%1$02d",n1), charOp, String.format("%1$02d",n2));
-            String answer = "";
+            //horrible output
+            //My thought: make a "config formatting" object/class in a
+            // separate file dedicated to format output for windows and linux respectively
+            String expression = String.format("  %s\n%c %s\n=====\n", String.format("%1$02d",n1), charOp, String.format("%1$02d",n2));
+            String answer;
 
             do {
-                System.out.printf("%s", ansi().fg(YELLOW).a(expression));
                 espeak.speak(question);
+                if(question.contains("×")){
+                    expression = expression.replace("×", "x");
+                }
+                else if(question.contains("−")){
+                    expression = expression.replace("−", "-");
+                }
+                System.out.printf("%s  ", ansi().fg(YELLOW).a(expression));
 
                 //User input
                 answer = inp.nextLine();
@@ -129,7 +138,7 @@ class MentalMath{
             questionNo = questionNo + 1;
         }
 
-        fw.write("Score: " + score + "/" + questionNo);
+        fw.write("Score: " + score + "/" + questionNo + '\n');
         fw.close();
 
         System.out.println("You scored: " + score + "/" + questionNo);
