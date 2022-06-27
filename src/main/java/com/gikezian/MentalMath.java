@@ -29,7 +29,7 @@ class MentalMath{
               solution = n1 * n2;
               break;
           case 3:
-              solution = Double.parseDouble(decimalFormat.format(n1 / n2)); //formats to 0.0
+              solution = Double.parseDouble(decimalFormat.format(n1 / n2)); //MUST TRUNCATE to 0.0
               break;
       }
         return solution;
@@ -54,17 +54,16 @@ class MentalMath{
 
     try{
         FileWriter fw = new FileWriter(FILE_NAME);
-        //File file = new File(FILE_NAME);
         Scanner inp = new Scanner(System.in);
         fw.write("");
 
         while(questionNo < 4) {
             n1 = rand.nextInt(10);  //Numbers from [0..100]
             n2 = rand.nextInt(10)+1;  //Numbers from [1..100]
-            op = rand.nextInt(4);    //[0..3]
-/*            n1 = 3;
-            n2 = 6;
-            op = 3; //Debugging purposes*/
+/*            op = rand.nextInt(4);    //[0..3]
+            n1 = 3;
+            n2 = 6;*/
+            op = 3; //Debugging purposes
             charOp = charOps[op]; //For writing to the file and the console
             solution = returnSolution(n1,n2,op);
 
@@ -73,17 +72,17 @@ class MentalMath{
 
             //write to System.out (FIX THE FORMATTING) (Still not satisfied)
             String expression = String.format("  %s\n%c %s\n‾‾‾‾‾\n", String.format("%1$02d",n1), charOp, String.format("%1$02d",n2));
-            System.out.printf("%s", expression);
-            espeak.speak(question);
-
-            //User input
-            String answer = inp.nextLine();
+            String answer = "";
 
 
-            while( !(NumberUtils.isCreatable(answer)) ){
+            do {
+                System.out.printf("%s", expression);
                 espeak.speak(question);
+
+                //User input
                 answer = inp.nextLine();
-            }
+            }while(!(NumberUtils.isCreatable(answer)));
+
 
             fw.write(" = " + answer + '\n');
 
@@ -113,6 +112,7 @@ class MentalMath{
       e.printStackTrace();
     }
     catch(Exception e){
+        System.out.println("Exception: ");
         e.printStackTrace();
     }
 
