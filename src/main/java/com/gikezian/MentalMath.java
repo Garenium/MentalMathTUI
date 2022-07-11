@@ -69,7 +69,7 @@ class MentalMath{
 
    clearConsole();
 
-    char[] charOps = {'+', '−', '×', '÷'};
+    char[] charOps = {'+', '-', 'x', '/'};
 
     int n1;
     int n2;
@@ -86,8 +86,8 @@ class MentalMath{
 
 
         while(questionNo < 4) {
-            n1 = rand.nextInt(10);  //Numbers from [0..100]
-            n2 = rand.nextInt(10)+1;  //Numbers from [1..100]
+            n1 = rand.nextInt(100);  //Numbers from [0..100]
+            n2 = rand.nextInt(100)+1;  //Numbers from [1..100]
             op = rand.nextInt(4);    //[0..3]
 /*            n1 = 3;
             n2 = 6;
@@ -95,24 +95,35 @@ class MentalMath{
             charOp = charOps[op]; //For writing to the file and the console
             solution = returnSolution(n1,n2,op);
 
-            String question = String.format("%d %c %d", n1, charOp, n2);
+            String operation = "";
+            switch(charOp){
+                case '+':
+                    operation = "plus";
+                    break;
+                case '-':
+                    operation = "minus";
+                    break;
+                case 'x':
+                    operation = "times";
+                    break;
+                case '/':
+                    operation = "divided by";
+                    break;
+            }
+            String question = String.format("%d %s %d", n1, operation, n2);
+/*            System.out.println(question);*/
             fw.write((questionNo+1) + ". " + question);
 
             //write to System.out (FIX THE FORMATTING) (Still not satisfied)
             //horrible output
             //My thought: make a "config formatting" object/class in a
             // separate file dedicated to format output for windows and linux respectively
+
             String expression = String.format("  %s\n%c %s\n=====\n", String.format("%1$02d",n1), charOp, String.format("%1$02d",n2));
             String answer;
 
             do {
                 espeak.speak(question);
-                if(question.contains("×")){
-                    expression = expression.replace("×", "x");
-                }
-                else if(question.contains("−")){
-                    expression = expression.replace("−", "-");
-                }
                 System.out.printf("%s  ", ansi().fg(YELLOW).a(expression));
 
                 //User input
