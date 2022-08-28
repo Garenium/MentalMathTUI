@@ -8,13 +8,24 @@ import java.util.Scanner;
 // import junit;
 import com.harium.hci.espeak.*;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.fusesource.jansi.AnsiConsole;
-import static org.fusesource.jansi.Ansi.Color.*;
-import static org.fusesource.jansi.Ansi.ansi;
+//import org.fusesource.jansi.AnsiConsole;
+//import static org.fusesource.jansi.Ansi.Color.*;
+//import static org.fusesource.jansi.Ansi.ansi;
 
 class MentalMath{
 
-  private static final String FILE_NAME = "quiz.txt";
+
+    // Reset
+    public static final String ANSI_RESET = "\033[0m";  // Text Reset
+
+    // Regular Colors
+    public static final String ANSI_RED = "\033[0;31m";     // RED
+    public static final String ANSI_GREEN = "\033[0;32m";   // GREEN
+
+    public static final String ANSI_YELLOW = "\033[0;33m";  // YELLOW
+
+
+    private static final String FILE_NAME = "quiz.txt";
   private static final DecimalFormat decimalFormat = new DecimalFormat("0.0");
 
   private static double returnSolution(double n1, double n2, int op){
@@ -60,14 +71,16 @@ class MentalMath{
         }
     }
   public static void main(String[] args) throws IOException {
-    String greetings = "Hello, this is MentalMathTUI. This program enables the user to practice calculating numbers mentally.\n" +
-            "";
-    System.out.println(greetings);
+
+    String greetings = "Welcome to MentalMathTUI. Your mental math coach.\n" +
+            "Non-integer answers are not approximated and are in tenths place\n"+
+            "Range: [0, 100]\n";
+
     Espeak espeak = new Espeak();
-    AnsiConsole.systemInstall();
     Random rand = new Random();
 
-   clearConsole();
+    clearConsole();
+    System.out.println(greetings);
 
     char[] charOps = {'+', '-', 'x', '/'};
 
@@ -124,7 +137,7 @@ class MentalMath{
 
             do {
                 espeak.speak(question);
-                System.out.printf("%s  ", ansi().fg(YELLOW).a(expression));
+                System.out.printf("%s  ",ANSI_YELLOW+expression+ANSI_RESET);
 
                 //User input
                 answer = inp.nextLine();
@@ -135,13 +148,13 @@ class MentalMath{
 
 
             if( (solution == Double.parseDouble(answer)) ){
-                System.out.println(ansi().fg(GREEN).a("Correct!"));
+                System.out.println(ANSI_GREEN+"Correct!"+ANSI_RESET);
                 System.out.println("The answer was " + answer);
                 fw.write(question + " = " + answer + " [V]" +"\n\n");
                 ++score;
             }
             else{
-                System.out.println(ansi().fg(RED).a("Incorrect!"));
+                System.out.println(ANSI_RED+"Incorrect!"+ANSI_RESET);
                 System.out.println("The answer was " + solution);
                 fw.write(question + " = " + answer + " [X]" +"\n\n");
             }
@@ -163,7 +176,6 @@ class MentalMath{
         e.printStackTrace();
     }
 
-    AnsiConsole.systemUninstall();
 
   }
 }
