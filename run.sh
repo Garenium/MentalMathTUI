@@ -5,6 +5,15 @@ BROWSER=$1
 found=1
 (dpkg -s $PACKAGE | grep -q "ok installed") && found=0
 
+# options=$(getopt -o x)
+
+# [ $? -eq 0 ] || { 
+#     echo "Incorrect options provided"
+#     exit 1
+# }
+
+# if [ $2 == "-"  ]
+
 if [ $found -eq 0 ]
 then
     echo "Found the package $PACKAGE"

@@ -5,27 +5,21 @@ import java.util.Random;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
-// import junit;
 import com.harium.hci.espeak.*;
 import org.apache.commons.lang3.math.NumberUtils;
-//import org.fusesource.jansi.AnsiConsole;
-//import static org.fusesource.jansi.Ansi.Color.*;
-//import static org.fusesource.jansi.Ansi.ansi;
 
 class MentalMath{
 
+  // Reset Colour
+  public static final String ANSI_RESET = "\033[0m";  // Text Reset
 
-    // Reset
-    public static final String ANSI_RESET = "\033[0m";  // Text Reset
+  // Regular Colors
+  public static final String ANSI_RED = "\033[0;31m";     // RED
+  public static final String ANSI_GREEN = "\033[0;32m";   // GREEN
+  public static final String ANSI_YELLOW = "\033[0;33m";  // YELLOW
 
-    // Regular Colors
-    public static final String ANSI_RED = "\033[0;31m";     // RED
-    public static final String ANSI_GREEN = "\033[0;32m";   // GREEN
-
-    public static final String ANSI_YELLOW = "\033[0;33m";  // YELLOW
-
-
-    private static final String FILE_NAME = "quiz.txt";
+  //Name for the file
+  private static final String FILE_NAME = "quiz.txt";
   private static final DecimalFormat decimalFormat = new DecimalFormat("0.0");
 
   private static double returnSolution(double n1, double n2, int op){
@@ -49,27 +43,28 @@ class MentalMath{
         return solution;
   }
 
-    public static void clearConsole()
-    {
-        try
-        {
-            final String os = System.getProperty("os.name");
+  public static void clearConsole()
+  {
+      try
+      {
+          final String os = System.getProperty("os.name");
 
-            if (os.contains("Windows"))
-            {
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            }
-            else
-            {
-                System.out.print("\033\143");
-            }
-        }
-        catch (final Exception e)
-        {
-            System.out.println("Console not properly cleaned");
-            e.printStackTrace();
-        }
-    }
+          if (os.contains("Windows"))
+          {
+              new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+          }
+          else
+          {
+              System.out.print("\033\143");
+          }
+      }
+      catch (final Exception e)
+      {
+          System.out.println("Console not properly cleaned");
+          e.printStackTrace();
+      }
+  }
+
   public static void main(String[] args) throws IOException {
 
     String greetings = "Welcome to MentalMathTUI. Your mental math coach.\n" +
@@ -97,15 +92,17 @@ class MentalMath{
         Scanner inp = new Scanner(System.in);
         fw.write("");
 
-
         while(questionNo < 4) {
-            n1 = rand.nextInt(100);  //Numbers from [0..100]
-            n2 = rand.nextInt(100)+1;  //Numbers from [1..100]
-            op = rand.nextInt(4);    //[0..3]
-/*            n1 = 3;
-            n2 = 6;
-            op = 1; //Debugging purposes*/
-            charOp = charOps[op]; //For writing to the file and the console
+            //INITIALIZE THE OPERANDS AND THE OPERATOR
+            //I thought the operands n1 and n2 are better names than x and y (or a and b).
+            n1 = rand.nextInt(100);    //Numbers from [0..100]
+            n2 = rand.nextInt(100)+1;  //Numbers from [1..100] (from 1 to disallow n1/0)
+            op = rand.nextInt(4);      //[0..3]
+            charOp = charOps[op]; //Initialize the character for the equation operator
+            //Debugging purposes
+            // n1 = 3;
+            //n2 = 6;
+            //op = 1;
             solution = returnSolution(n1,n2,op);
 
             String operation = "";
@@ -124,29 +121,24 @@ class MentalMath{
                     break;
             }
             String question = String.format("%d %s %d", n1, operation, n2);
-/*            System.out.println(question);*/
             fw.write((questionNo+1) + ". " + question);
 
-            //write to System.out (FIX THE FORMATTING) (Still not satisfied)
-            //horrible output
-            //My thought: make a "config formatting" object/class in a
-            // separate file dedicated to format output for windows and linux respectively
-
+            //OUTPUT EQUATION
             String expression = String.format("  %s\n%c %s\n=====\n", String.format("%1$02d",n1), charOp, String.format("%1$02d",n2));
             String answer;
 
+            //DO WHILE UNTIL USER INPUT IA A VALID NUMBER
             do {
-                espeak.speak(question);
-                System.out.printf("%s  ",ANSI_YELLOW+expression+ANSI_RESET);
-
-                //User input
+                espeak.speak(question); //AUDIO FOR THE EQUATION
+                System.out.printf("%s  ",ANSI_YELLOW+expression+ANSI_RESET); //PRINT THE EQUATION
+                //USER INPUT
                 answer = inp.nextLine();
             }while(!(NumberUtils.isCreatable(answer)));
 
 
             fw.write(" = " + answer + '\n');
 
-
+            //CHECK IF THE INPUT IS CORRECT
             if( (solution == Double.parseDouble(answer)) ){
                 System.out.println(ANSI_GREEN+"Correct!"+ANSI_RESET);
                 System.out.println("The answer was " + answer);
@@ -159,9 +151,11 @@ class MentalMath{
                 fw.write(question + " = " + answer + " [X]" +"\n\n");
             }
 
+            //ADD questionNo BY ONE UNTIL THE NUMBER OF QUESTIONS ARE ALL MET (VIA WHILE)
             questionNo = questionNo + 1;
         }
 
+        //SCORE OUTPUT
         fw.write("Score: " + score + "/" + questionNo + '\n');
         fw.close();
 
