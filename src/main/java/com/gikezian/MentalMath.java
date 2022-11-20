@@ -67,15 +67,10 @@ class MentalMath{
 
   public static void main(String[] args) throws IOException {
 
-    String greetings = "Welcome to MentalMathTUI. Your mental math coach.\n" +
-            "Non-integer answers are not approximated and are in tenths place\n"+
-            "Range: [0, 100]\n";
-
     Espeak espeak = new Espeak();
     Random rand = new Random();
 
     clearConsole();
-    System.out.println(greetings);
 
     char[] charOps = {'+', '-', 'x', '/'};
 
@@ -85,18 +80,53 @@ class MentalMath{
     char charOp;
     double solution; //typed the full name "solution" to stand out
     int score = 0;
-    int questionNo = 0;
+    int questionNos = 10;
+    int maxRange = 100;
 
-    try{
-        FileWriter fw = new FileWriter(FILE_NAME);
-        Scanner inp = new Scanner(System.in);
+
+    //look at the arguments
+      if(args.length == 2){
+            System.out.println("There will be "+args[0]+" questions");
+            System.out.println("The max range is " + args[1] + ".");
+            //args[0] is the max range (max 100)
+            //args[1] is the number of questions (max 50)
+            try{
+                questionNos = Integer.parseUnsignedInt(args[0]);
+                maxRange = Integer.parseUnsignedInt(args[1]);
+               // if(questionNos > 50 && maxRange > 99){
+               //     System.exit(-1);
+               // }
+            }
+            catch(NumberFormatException ex){
+                System.out.println("Error: Invalid parameter(s)");
+                System.exit(-1);
+            }
+      }
+
+
+
+      String greetings = "Welcome to MentalMathTUI. Your mental math coach.\n" +
+              "Non-integer answers are not approximated and are in tenths place\n"+
+              String.format("Range: [0, %d]\n", maxRange);
+
+      System.out.println(greetings);
+
+
+      Scanner inp = new Scanner(System.in);
+      System.out.println("Press any input to start: ");
+      espeak.speak("Press any input to start");
+      inp.nextLine();
+
+      try{
+          FileWriter fw = new FileWriter(FILE_NAME);
         fw.write("");
 
-        while(questionNo < 4) {
+        int questionNo = 0;
+        while(questionNo < questionNos) {
             //INITIALIZE THE OPERANDS AND THE OPERATOR
             //I thought the operands n1 and n2 are better names than x and y (or a and b).
-            n1 = rand.nextInt(100);    //Numbers from [0..100]
-            n2 = rand.nextInt(100)+1;  //Numbers from [1..100] (from 1 to disallow n1/0)
+            n1 = rand.nextInt(maxRange);    //Numbers from [0..100]
+            n2 = rand.nextInt(maxRange)+1;  //Numbers from [1..100] (from 1 to disallow n1/0)
             op = rand.nextInt(4);      //[0..3]
             charOp = charOps[op]; //Initialize the character for the equation operator
             //Debugging purposes

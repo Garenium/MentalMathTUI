@@ -19,18 +19,23 @@ then
     echo "Found the package $PACKAGE"
 
      #zooms four times
-     xdotool key Ctrl+plus 
-     xdotool key Ctrl+plus 
-     xdotool key Ctrl+plus   
-     xdotool key Ctrl+plus 
+     for i in {1..4}; do xdotool key Ctrl+plus; done
 
-    ./gradlew clean createFatJar
-    ./gradlew -q --console plain run 
+     ./gradlew clean createFatJar
 
-     xdotool key Ctrl+minus
-     xdotool key Ctrl+minus
-     xdotool key Ctrl+minus
-     xdotool key Ctrl+minus
+     if [ $# -eq 0 ]; then
+        ./gradlew -q --console plain run 
+     elif [ $# -eq 2 ]; then
+        ./gradlew -q --console plain run --args="$1 $2"
+    else 
+        echo "Invalid number of arguments"
+        exit
+     fi
+
+    # ./gradlew clean createFatJar
+    # ./gradlew -q --console plain run 
+
+     for i in {1..4}; do xdotool key Ctrl+minus; done
 
 else
     echo "$PACKAGE is required to proceed"
