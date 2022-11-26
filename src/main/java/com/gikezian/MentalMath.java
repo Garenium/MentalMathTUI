@@ -86,8 +86,6 @@ class MentalMath{
 
     //look at the arguments
       if(args.length == 2){
-            System.out.println("There will be "+args[0]+" questions");
-            System.out.println("The max range is " + args[1] + ".");
             //args[0] is the max range (max 100)
             //args[1] is the number of questions (max 50)
             try{
@@ -102,15 +100,31 @@ class MentalMath{
                 System.exit(-1);
             }
       }
+      else if(args.length == 1){
+          if(args[0].equals("-h")){
+              String help = "\n" +
+                      "To get help: ./run -h\n" +
+                      "./run [num of questions] [max range]\n\n" +
+                      "Made by Garenium (2022)\n";
+              System.out.println(help);
+              System.exit(0);
+          }
+          else{
+              System.out.println("Invalid argument: \""+args[0]+"\"");
+              System.exit(-1);
+          }
+
+      }
 
 
 
       String greetings = "Welcome to MentalMathTUI. Your mental math coach.\n" +
-              "Non-integer answers are not approximated and are in tenths place\n"+
-              String.format("Range: [0, %d]\n", maxRange);
+              "Non-integer answers are not approximated and are in tenths place\n";
 
       System.out.println(greetings);
 
+      System.out.println("There will be "+questionNos+" questions.");
+      System.out.println(String.format("Range: [0, %d]\n", maxRange));
 
       Scanner inp = new Scanner(System.in);
       System.out.println("Press any input to start: ");
