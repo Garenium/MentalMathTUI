@@ -1,25 +1,48 @@
-PACKAGE="xdotool"
-BROWSER=$1
 
 #check if the package is found (0 is true)
-found=1
-(dpkg -s $PACKAGE | grep -q "ok installed") && found=0
+#installing dependencies
+packages=("openjdk-11-jdk" "espeak")
+notWayland=0
 
-# options=$(getopt -o x)
+#check if X11 --> add xdotool (optional; yes or no)
+if [ "$WAYLAND_DISPLAY" != "wayland-0" ]; then
+    #X11
+    xdotoolAdd=$(dpkg-query -W --showformat='${Status}\n' "xdotool" | grep "install ok installed")
+    if [  "$xdotoolAdd" == "" ]; then
+        read -p "Do you wish to install xdotool? [Y/n]: " answer
+        answer="${answer:-Y}"
+        [[ $answer =~ [Yy] ]] && sudo apt-get install xdotool
+    fi
+else
+    #Wayland
+    echo "Display: Wayland (xdotool does not support Wayland)"
+    notWayland=$((notWayland+1))
+fi
 
-# [ $? -eq 0 ] || { 
-#     echo "Incorrect options provided"
-#     exit 1
-# }
+foundPkgs=0
+#installing packages
+for pkg in ${packages[@]}; do
 
-# if [ $2 == "-"  ]
+    foundPkgs=$((foundPkgs+1))
+    is_pkg_installed=$(dpkg -s ${pkg} | grep "install ok installed")
 
-if [ $found -eq 0 ]
+    if [ "${is_pkg_installed}" == "Status: install ok installed" ];
+    then
+        echo ${pkg} is installed.
+    else
+        echo "${pkg} is required to proceed"
+        echo "Installing ${pkg} in 5 seconds..."
+        sleep 5
+        sudo apt -y install ${pkg}
+    fi
+done
+
+#compile and run
+if [ ${#packages[@]} -eq ${foundPkgs} ]
 then
-    echo "Found the package $PACKAGE"
 
-     #zooms four times
-     for i in {1..4}; do xdotool key Ctrl+plus; done
+    #zooms in four times then zoom out four times
+     [ $notWayland -eq 0 ] && for i in {1..4}; do xdotool key Ctrl+plus; done
 
      ./gradlew clean createFatJar
 
@@ -32,17 +55,7 @@ then
         exit
      fi
 
-    # ./gradlew clean createFatJar
-    # ./gradlew -q --console plain run 
-
-     for i in {1..4}; do xdotool key Ctrl+minus; done
-
-else
-    echo "$PACKAGE is required to proceed"
-    echo "Installing $PACKAGE in 5 seconds..."
-    sleep 5
-    sudo apt install xdotool
-    echo "You may now rerun the program"
+    [ $notWayland -eq 0 ] && for i in {1..4}; do xdotool key Ctrl+minus; done
 fi
 
 
