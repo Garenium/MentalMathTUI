@@ -70,7 +70,7 @@ class MentalMath{
     Espeak espeak = new Espeak();
     Random rand = new Random();
 
-    clearConsole();
+    //clearConsole();
 
     char[] charOps = {'+', '-', 'x', '/'};
 
@@ -81,40 +81,41 @@ class MentalMath{
     double solution; //typed the full name "solution" to stand out
     int score = 0;
     int questionNos = 10;
-    int maxRange = 100;
+    int maxRange = 10;
 
 
-    //look at the arguments
-      if(args.length == 2){
-            //args[0] is the max range (max 100)
-            //args[1] is the number of questions (max 50)
-            try{
-                questionNos = Integer.parseUnsignedInt(args[0]);
-                maxRange = Integer.parseUnsignedInt(args[1]);
-               // if(questionNos > 50 && maxRange > 99){
-               //     System.exit(-1);
-               // }
-            }
-            catch(NumberFormatException ex){
-                System.out.println("Error: Invalid parameter(s)");
-                System.exit(-1);
-            }
-      }
-      else if(args.length == 1){
-          if(args[0].equals("-h")){
-              String help = "\n" +
-                      "To get help: ./run -h\n" +
-                      "./run [num of questions] [max range]\n\n" +
-                      "Made by Garenium (2022)\n";
-              System.out.println(help);
-              System.exit(0);
-          }
-          else{
-              System.out.println("Invalid argument: \""+args[0]+"\"");
-              System.exit(-1);
-          }
+    //bash will care of this
+    ////look at the arguments
+    //  if(args.length == 2){
+    //        //args[0] is the max range (max 100)
+    //        //args[1] is the number of questions (max 50)
+    //        try{
+    //            questionNos = Integer.parseUnsignedInt(args[0]);
+    //            maxRange = Integer.parseUnsignedInt(args[1]);
+    //           // if(questionNos > 50 && maxRange > 99){
+    //           //     System.exit(-1);
+    //           // }
+    //        }
+    //        catch(NumberFormatException ex){
+    //            System.out.println("Error: Invalid parameter(s)");
+    //            System.exit(-1);
+    //        }
+    //  }
+    //  else if(args.length == 1){
+    //      if(args[0].equals("-h")){
+    //          String help = "\n" +
+    //                  "To get help: ./run -h\n" +
+    //                  "./run [num of questions] [max range]\n\n" +
+    //                  "Made by Garenium (2022)\n";
+    //          System.out.println(help);
+    //          System.exit(0);
+    //      }
+    //      else{
+    //          System.out.println("Invalid argument: \""+args[0]+"\"");
+    //          System.exit(-1);
+    //      }
 
-      }
+    //  }
 
 
 
@@ -185,7 +186,7 @@ class MentalMath{
             //CHECK IF THE INPUT IS CORRECT
             if( (solution == Double.parseDouble(answer)) ){
                 System.out.println(ANSI_GREEN+"Correct!"+ANSI_RESET);
-                System.out.println("The answer was " + answer);
+                System.out.println("The answer was " + answer+'\n');
                 fw.write(question + " = " + answer + " [V]" +"\n\n");
                 ++score;
             }
