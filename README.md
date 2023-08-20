@@ -15,3 +15,4 @@ You may need openjdk-11 and espeak installed by default (if you don't have them,
 
 For first time users, Wait 1-2 minute(s) until the project starts accordingly.
 
+[Demo](./MentalMathTUI_Demo.mp4)
