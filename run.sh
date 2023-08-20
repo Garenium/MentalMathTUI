@@ -1,10 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
 # Check if the package is found (0 is true)
 # Installing dependencies
 packages="openjdk-11-jdk espeak"
 isXdotool=0
 
+if [[ "$#" -gt 2 ||  "$1" = "-h" ]]; then
+    echo "Invalid number of arguments"
+    echo "./run [num of questions] [max range from 0]"
+    echo "Negative numbers are not permitted."
+    exit 0
+fi
 
 
 # Check if X11 --> add xdotool (optional; yes or no)

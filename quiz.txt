@@ -1,0 +1,16 @@
+1. 9 minus 6 = 3
+9 minus 6 = 3 [V]
+
+2. 0 minus 3 = -3
+0 minus 3 = -3 [V]
+
+3. 9 times 6 = 54
+9 times 6 = 54 [V]
+
+4. 8 divided by 8 = 0
+8 divided by 8 = 0 [X]
+
+5. 4 divided by 5 = 1.4
+4 divided by 5 = 1.4 [X]
+
+Score: 3/5
