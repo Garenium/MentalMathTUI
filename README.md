@@ -17,6 +17,9 @@ For first time users, Wait 1-2 minute(s) until the project starts accordingly.
 
 https://github.com/Garenium/MentalMathTUI/assets/45079326/1b250935-4c9c-4289-b16a-9edbf691bdc6
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 6d95e55d43ebc59cce428cfedd479bae1f931ba8
